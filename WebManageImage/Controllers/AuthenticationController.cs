@@ -34,7 +34,6 @@ namespace WebManageImage.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> RegisterUser([FromBody] UserForRegistrationDto userForRegistration)
         {
-            userForRegistration.IsLike = false;
             var user = _mapper.Map<User>(userForRegistration);
             var result = await _userManager.CreateAsync(user, userForRegistration.Password);
             if (!result.Succeeded)
@@ -60,16 +59,7 @@ namespace WebManageImage.Controllers
             }
             var tk = await _authManager.CreateToken();
 
-            return Ok(tk);
-
-            /*return Ok(new { token = await _authManager.CreateToken() });*/
-
-            /*return new ObjectResult(new
-            {
-                
-                token = tk,
-                
-            });*/
+            return Ok(tk); 
         }
 
 

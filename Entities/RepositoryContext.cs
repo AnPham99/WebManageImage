@@ -18,7 +18,7 @@ namespace Entities
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Like>().HasKey(l => new { l.ImageId, l.UserId });
+            modelBuilder.Entity<Like>().HasKey(l => new { l.UserId, l.ImageId });
 
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
             modelBuilder.ApplyConfiguration(new ImageConfiguration());         
@@ -29,7 +29,8 @@ namespace Entities
         public DbSet<Category> Categories { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<Like> Likes { set; get; }
-
+        public DbSet<Comment> Comments { set; get; }
+        public override DbSet<User> Users { set; get; }
       
 
     }

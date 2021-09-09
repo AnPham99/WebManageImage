@@ -15,15 +15,21 @@ namespace Contracts
         Task<IEnumerable<Image>> GetImageByUserAsync (string userId, bool trackChanges);
         Task<Image> GetImageByIdForUserAsync(string userId, int imageId, bool trackChanges);
         Task CreateImageAsync(string userId, Image image);
-        Task DeleteImageAsync(string userId, Image image);
-        Task LikeImageAsync(Image image);
+        Task DeleteImageAsync(string userId, Image image);      
         Task UpdateImageByUserAsync(string userId, Image image);
         Task ApprovalImageByAdminAsync(Image image);
         Task DenyImageByAdminAsync(Image image);
-
-
-
+        Task IncreaseView(Image image);
+        Task <Image> GetImageTopLike();
+        Task<Image> GetImageTopCmt();
+        Task<Image> GetImageTopView();
+        Task UpdateImage(Image image);
         Task<IEnumerable<Image>> GetImageHasApproval();
         Task<IEnumerable<Image>> GetImageNotApproval();
+
+        Task LikeImageByUserAsync(string userId, int imageId, Image image);
+        Task addLikeImageAsync(string userId, int imageId, Image image);
+        Task minusLikeImageAsync(string userId, int imageId, Image image);
+
     }
 }

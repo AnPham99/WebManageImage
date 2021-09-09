@@ -9,10 +9,9 @@ namespace Entities.Models
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-
-        public bool IsLike { set; get; }
         public List<Image> Images { set; get; }
-        public Like Like { set; get; }
+        public List<Like> Likes { set; get; }
+        public List<Comment> Comments { set; get; }
     }
 
 }

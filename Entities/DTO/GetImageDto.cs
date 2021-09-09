@@ -19,6 +19,7 @@ namespace Entities.DTO
         public int ViewsCount { set; get; }
         public bool ImageStatus { set; get; }
         public bool IsApproval { set; get; }
+        public int CategoryId { set; get; }
         public bool IsLike { set; get; }
 
     }

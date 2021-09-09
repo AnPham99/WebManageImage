@@ -22,7 +22,7 @@ namespace Entities.DTO
         [Required(ErrorMessage = "Image imageStatus is a required field.")]
         public bool ImageStatus { set; get; }
 
-        [Required]
+        public bool IsApproval { set; get; }     
         public int CategoryId { set; get; }
 
        

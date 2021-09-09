@@ -69,6 +69,31 @@ namespace WebManageImage.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Entities.Models.Comment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ImageId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ImageId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comments");
+                });
+
             modelBuilder.Entity("Entities.Models.Image", b =>
                 {
                     b.Property<int>("Id")
@@ -98,9 +123,6 @@ namespace WebManageImage.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsDeny")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsLike")
                         .HasColumnType("bit");
 
                     b.Property<int>("LikeCount")
@@ -143,7 +165,6 @@ namespace WebManageImage.Migrations
                             ImageStatus = true,
                             IsApproval = true,
                             IsDeny = false,
-                            IsLike = false,
                             LikeCount = 48,
                             Name = "Chó Corgi",
                             Url = "../../assets/Img/chocogri.jpeg",
@@ -160,7 +181,6 @@ namespace WebManageImage.Migrations
                             ImageStatus = true,
                             IsApproval = true,
                             IsDeny = false,
-                            IsLike = false,
                             LikeCount = 24,
                             Name = "Rừng nhiệt đới",
                             Url = "../../assets/Img/rungnhietdoi.jpeg",
@@ -177,7 +197,6 @@ namespace WebManageImage.Migrations
                             ImageStatus = true,
                             IsApproval = true,
                             IsDeny = false,
-                            IsLike = false,
                             LikeCount = 46,
                             Name = "Con gái miền tây",
                             Url = "../../assets/Img/congaimientay.jpeg",
@@ -188,13 +207,12 @@ namespace WebManageImage.Migrations
                         {
                             Id = 4,
                             CategoryId = 3,
-                            CommentCount = 0,
+                            CommentCount = 5,
                             DateCreate = new DateTime(2021, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Desciption = "Vẻ mặt chú mèo trông ngây thơ khi đòi ăn",
                             ImageStatus = true,
                             IsApproval = true,
                             IsDeny = false,
-                            IsLike = false,
                             LikeCount = 109,
                             Name = "Mèo",
                             Url = "../../assets/Img/meo.jpeg",
@@ -211,7 +229,6 @@ namespace WebManageImage.Migrations
                             ImageStatus = true,
                             IsApproval = true,
                             IsDeny = false,
-                            IsLike = false,
                             LikeCount = 27,
                             Name = "Hoàng hôn",
                             Url = "../../assets/Img/hoanghon.jpeg",
@@ -228,7 +245,6 @@ namespace WebManageImage.Migrations
                             ImageStatus = true,
                             IsApproval = true,
                             IsDeny = false,
-                            IsLike = false,
                             LikeCount = 0,
                             Name = "Ảnh thẻ",
                             Url = "../../assets/Img/anhthe.jpeg",
@@ -245,12 +261,11 @@ namespace WebManageImage.Migrations
                             ImageStatus = true,
                             IsApproval = true,
                             IsDeny = false,
-                            IsLike = false,
                             LikeCount = 23,
                             Name = "Chim cánh cụt",
                             Url = "../../assets/Img/chimcanhcut.jpeg",
                             UserName = "Ân Phạm",
-                            ViewsCount = 50
+                            ViewsCount = 732
                         },
                         new
                         {
@@ -262,7 +277,6 @@ namespace WebManageImage.Migrations
                             ImageStatus = true,
                             IsApproval = true,
                             IsDeny = false,
-                            IsLike = false,
                             LikeCount = 54,
                             Name = "Dòng sông quê em",
                             Url = "../../assets/Img/dongsongqueem.jpeg",
@@ -279,12 +293,11 @@ namespace WebManageImage.Migrations
                             ImageStatus = true,
                             IsApproval = true,
                             IsDeny = false,
-                            IsLike = false,
                             LikeCount = 299,
                             Name = "Bikini",
                             Url = "../../assets/Img/bikini.jpeg",
                             UserName = "Ân Phạm",
-                            ViewsCount = 9999
+                            ViewsCount = 78
                         },
                         new
                         {
@@ -296,7 +309,6 @@ namespace WebManageImage.Migrations
                             ImageStatus = true,
                             IsApproval = true,
                             IsDeny = false,
-                            IsLike = false,
                             LikeCount = 88,
                             Name = "Vịnh Hạ Long",
                             Url = "../../assets/Img/vinhhalong.jpeg",
@@ -313,7 +325,6 @@ namespace WebManageImage.Migrations
                             ImageStatus = true,
                             IsApproval = true,
                             IsDeny = false,
-                            IsLike = false,
                             LikeCount = 18,
                             Name = "Sa mạc Sahara",
                             Url = "../../assets/Img/sahara.jpeg",
@@ -330,7 +341,6 @@ namespace WebManageImage.Migrations
                             ImageStatus = true,
                             IsApproval = true,
                             IsDeny = false,
-                            IsLike = false,
                             LikeCount = 30,
                             Name = "Kim tự tháp",
                             Url = "../../assets/Img/kimtuthap.jpeg",
@@ -341,19 +351,18 @@ namespace WebManageImage.Migrations
 
             modelBuilder.Entity("Entities.Models.Like", b =>
                 {
-                    b.Property<int>("ImageId")
-                        .HasColumnType("int");
-
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("ImageId")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsLike")
                         .HasColumnType("bit");
 
-                    b.HasKey("ImageId", "UserId");
+                    b.HasKey("UserId", "ImageId");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("ImageId");
 
                     b.ToTable("Likes");
                 });
@@ -379,9 +388,6 @@ namespace WebManageImage.Migrations
 
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsLike")
-                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
@@ -461,15 +467,15 @@ namespace WebManageImage.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1b4613c7-e6a6-4e5b-917e-7d0fd100d031",
-                            ConcurrencyStamp = "4189b611-486a-4157-8550-23c208a9e731",
+                            Id = "27f63c5e-b187-45a5-a26d-50484480bb2a",
+                            ConcurrencyStamp = "bd2bb3f2-f581-46f5-a73e-42fbffe1c3e5",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "2d7d45dc-0f7a-4ca1-b444-d1f06160028d",
-                            ConcurrencyStamp = "893004c6-4e5b-4202-821f-fc8d321e3cd6",
+                            Id = "9042ef13-9435-4017-9cfc-9b548140a4ac",
+                            ConcurrencyStamp = "4fa8d08d-cc5a-42dd-aa9e-7eda91047156",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
@@ -579,9 +585,26 @@ namespace WebManageImage.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("Entities.Models.Comment", b =>
+                {
+                    b.HasOne("Entities.Models.Image", "Image")
+                        .WithMany("Comments")
+                        .HasForeignKey("ImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Entities.Models.User", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Image");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Entities.Models.Image", b =>
                 {
-                    b.HasOne("Entities.Models.Category", "Categories")
+                    b.HasOne("Entities.Models.Category", "Category")
                         .WithMany("Images")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -591,7 +614,7 @@ namespace WebManageImage.Migrations
                         .WithMany("Images")
                         .HasForeignKey("UserId");
 
-                    b.Navigation("Categories");
+                    b.Navigation("Category");
 
                     b.Navigation("User");
                 });
@@ -605,8 +628,8 @@ namespace WebManageImage.Migrations
                         .IsRequired();
 
                     b.HasOne("Entities.Models.User", "User")
-                        .WithOne("Like")
-                        .HasForeignKey("Entities.Models.Like", "UserId")
+                        .WithMany("Likes")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -673,14 +696,18 @@ namespace WebManageImage.Migrations
 
             modelBuilder.Entity("Entities.Models.Image", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("Likes");
                 });
 
             modelBuilder.Entity("Entities.Models.User", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("Images");
 
-                    b.Navigation("Like");
+                    b.Navigation("Likes");
                 });
 #pragma warning restore 612, 618
         }

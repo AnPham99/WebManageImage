@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace Entities.Models
 {
-    public class Like
+    public class Comment
     {
-        public bool IsLike { set; get; }
+        [Key]
+        public int Id { set; get; }
         public int ImageId { set; get; }
         public Image Image { set; get; }
         public string UserId { set; get; }
         public User User { set; get; }
+        public string Content { set; get; }
+
     }
 }

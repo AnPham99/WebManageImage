@@ -32,17 +32,16 @@ namespace Entities.Models
         [Required(ErrorMessage = "Xin hãy chọn trạng thái ảnh.")]
         public bool ImageStatus { set; get; }
         public bool IsApproval { set; get; }
-        public bool IsDeny { set; get; }
-        public bool IsLike { set; get; }
+        public bool IsDeny { set; get; }  
         public string UserName { set; get; }
-
-        [ForeignKey(nameof(Category))]
         public int CategoryId { set; get; }
-        public Category Categories { set; get; }
+        public Category Category { set; get; }
 
         public string UserId { set; get; }
         public User User { set; get; }
 
         public List<Like> Likes { set; get; }
+        public List<Comment> Comments { set; get; }
+
     }
 }

@@ -95,7 +95,6 @@ namespace WebManageImage.Controllers
             var imageEntity = _mapper.Map<Image>(imageForCreate);
 
             await _imageService.CreateImageAsync(userId, imageEntity);
-            var imageToReturn = _mapper.Map<GetImageDto>(imageEntity);
             return Ok("Đã tạo ảnh thành công");
         }
 
@@ -108,24 +107,9 @@ namespace WebManageImage.Controllers
             return Ok("Đã xóa thành công");
         }
 
-        [HttpPut("id/{imageId}")]
-        public async Task<IActionResult> LikeImage(int imageId, [FromBody] ImageForUpdateDto imageForUpdateDto)
-        {
-            if (imageForUpdateDto == null)
-                return BadRequest("Bạn cần phải nhập thông tin của ảnh");
-            if (!ModelState.IsValid)
-            {
-                _logger.LogError("Invalid model state for the EmployeeForCreationDto object");
-                return UnprocessableEntity(ModelState);
-            }
-            var imageDb = await _imageService.GetImageByIdAsync(imageId, trackChanges: true);
-            var image = _mapper.Map(imageForUpdateDto, imageDb);
-            await _imageService.LikeImageAsync(image);
-            return Ok("Đã sửa thành công");
-        }
 
         [HttpPut("{userId}/{imageId}")]
-        public async Task<IActionResult> UpdateImage (string userId, int imageId, [FromBody] ImageForUpdateDto imageForUpdateDto)
+        public async Task<IActionResult> UpdateImage(string userId, int imageId, [FromBody] ImageForUpdateDto imageForUpdateDto)
         {
             if (imageForUpdateDto == null)
                 return BadRequest("Bạn cần phải nhập thông tin của ảnh");
@@ -136,7 +120,7 @@ namespace WebManageImage.Controllers
             }
             var imageDb = await _imageService.GetImageByIdForUserAsync(userId, imageId, trackChanges: true);
             var image = _mapper.Map(imageForUpdateDto, imageDb);
-            await _imageService.UpdateImageByUserAsync(userId,image);
+            await _imageService.UpdateImageByUserAsync(userId, image);
             return Ok("Đã sửa thành công");
         }
 
@@ -172,6 +156,22 @@ namespace WebManageImage.Controllers
             return Ok("Đã sửa thành công");
         }
 
+        [HttpPut("increaseview/{imageId}")]
+        public async Task<IActionResult> IncreaseView(int imageId, [FromBody] ImageForUpdateDto imageForUpdateDto)
+        {
+            if (imageForUpdateDto == null)
+                return BadRequest("Bạn cần phải nhập thông tin của ảnh");
+            if (!ModelState.IsValid)
+            {
+                _logger.LogError("Invalid model state for the EmployeeForCreationDto object");
+                return UnprocessableEntity(ModelState);
+            }
+            var imageDb = await _imageService.GetImageByIdAsync(imageId, trackChanges: true);
+            var image = _mapper.Map(imageForUpdateDto, imageDb);
+            await _imageService.IncreaseView(image);
+            return Ok("Đã sửa thành công");
+        }
+
         [HttpGet("hasapproval")]
         public async Task<IActionResult> GetImageHasApproval()
         {
@@ -180,13 +180,99 @@ namespace WebManageImage.Controllers
             return Ok(imageDto);
         }
 
-        [HttpGet("notapproval")]
-        [Authorize(Roles = "Admin")]
+        [HttpGet("notapproval")]      
         public async Task<IActionResult> GetImageNotApproval()
         {
             var image = await _imageService.GetImageNotApproval();
             var imageDto = _mapper.Map<IEnumerable<GetImageDto>>(image);
             return Ok(imageDto);
+        }
+
+        [HttpGet("toplike")]
+        public async Task<IActionResult> GetImageTopLike()
+        {
+            var image = await _imageService.GetImageTopLike();
+            var imageDto = _mapper.Map<GetImageDto>(image);
+            return Ok(imageDto);
+        }
+
+        [HttpGet("topcmt")]
+        public async Task<IActionResult> GetImageTopCmt()
+        {
+            var image = await _imageService.GetImageTopCmt();
+            var imageDto = _mapper.Map<GetImageDto>(image);
+            return Ok(imageDto);
+        }
+
+        [HttpGet("topview")]
+        public async Task<IActionResult> GetImageTopView()
+        {
+            var image = await _imageService.GetImageTopView();
+            var imageDto = _mapper.Map<GetImageDto>(image);
+            return Ok(imageDto);
+        }
+
+        [HttpGet("islikebyuser/{userId}/{imageId}")]
+        public async Task<IActionResult> LikeByUser(string userId, int imageId)
+        {
+            var IsLike = await _imageService.IsLikeImageAsync(userId, imageId);
+            return Ok(IsLike);
+        }
+
+        [HttpPut("addlike/{userId}/{imageId}")]
+        public async Task<IActionResult> AddLike(string userId, int imageId, [FromBody] ImageForUpdateDto imageForUpdateDto)
+        {
+            if (imageForUpdateDto == null)
+                return BadRequest("Bạn cần phải nhập thông tin của ảnh");
+            if (!ModelState.IsValid)
+            {
+                _logger.LogError("Invalid model state for the EmployeeForCreationDto object");
+                return UnprocessableEntity(ModelState);
+            }
+            var imageDb = await _imageService.GetImageByIdAsync(imageId, trackChanges: true);
+            var image = _mapper.Map(imageForUpdateDto, imageDb);
+            await _imageService.addLikeImageAsync(userId, imageId, image);
+            return Ok("Đã sửa thành công");
+        }
+
+        [HttpPut("minuslike/{userId}/{imageId}")]
+        public async Task<IActionResult> minusLike(string userId, int imageId, [FromBody] ImageForUpdateDto imageForUpdateDto)
+        {
+            if (imageForUpdateDto == null)
+                return BadRequest("Bạn cần phải nhập thông tin của ảnh");
+            if (!ModelState.IsValid)
+            {
+                _logger.LogError("Invalid model state for the EmployeeForCreationDto object");
+                return UnprocessableEntity(ModelState);
+            }
+            var imageDb = await _imageService.GetImageByIdAsync(imageId, trackChanges: true);
+            var image = _mapper.Map(imageForUpdateDto, imageDb);
+            await _imageService.minusLikeImageAsync(userId, imageId, image);
+            return Ok("Đã sửa thành công");
+        }
+
+        [HttpPut("likebyuser/{userId}/{imageId}")]
+        public async Task<IActionResult> LikeByUser(string userId, int imageId, [FromBody] ImageForUpdateDto imageForUpdateDto)
+        {
+            if (imageForUpdateDto == null)
+                return BadRequest("Bạn cần phải nhập thông tin của ảnh");
+            if (!ModelState.IsValid)
+            {
+                _logger.LogError("Invalid model state for the EmployeeForCreationDto object");
+                return UnprocessableEntity(ModelState);
+            }
+            var imageDb = await _imageService.GetImageByIdAsync(imageId, trackChanges: true);
+            var image = _mapper.Map(imageForUpdateDto, imageDb);
+            await _imageService.LikeImageByUserAsync(userId, imageId, image);
+            return Ok("Đã sửa thành công");
+        }
+
+       
+        [HttpPut("addcomment/{imageId}")]
+        public async Task<IActionResult> Addcomment(int imageId, Image image)
+        {
+            await _imageService.UpdateImage(imageId, image);
+            return Ok("Đã sửa thành công");
         }
     }
 }

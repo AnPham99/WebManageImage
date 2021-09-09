@@ -13,6 +13,7 @@ namespace Entities.Configuration
         public void Configure(EntityTypeBuilder<Image> builder)
         {
             builder.HasOne(i => i.User).WithMany(u => u.Images).HasForeignKey(i => i.UserId);
+            builder.HasOne(i => i.Category).WithMany(c => c.Images).HasForeignKey(i => i.CategoryId);
 
             builder.HasData
                 (
@@ -31,8 +32,7 @@ namespace Entities.Configuration
                         UserName = "Ân Phạm",
                         CategoryId = 3,
                         IsApproval = true,
-                        IsDeny = false,
-                        IsLike = false
+                        IsDeny = false
                     },
 
                     new Image()
@@ -50,8 +50,7 @@ namespace Entities.Configuration
                         UserName = "Ân Phạm",
                         CategoryId = 1,
                         IsApproval = true,
-                        IsDeny = false,
-                        IsLike = false
+                        IsDeny = false
                     },
 
                     new Image()
@@ -69,8 +68,7 @@ namespace Entities.Configuration
                         UserName = "Ân Phạm",
                         CategoryId = 2,
                         IsApproval = true,
-                        IsDeny = false,
-                        IsLike = false
+                        IsDeny = false
 
                     },
                     new Image()
@@ -82,15 +80,13 @@ namespace Entities.Configuration
                         ImageStatus = true,
                         DateCreate = new DateTime(2021, 06, 28),
                         LikeCount = 109,
-                        CommentCount = 0,
+                        CommentCount = 5,
                         ViewsCount = 111,
                         UserId = null,
                         UserName = "Ân Phạm",
                         CategoryId = 3,
                         IsApproval = true,
-                        IsDeny = false,
-                        IsLike = false
-
+                        IsDeny = false
                     },
 
                     new Image()
@@ -108,9 +104,7 @@ namespace Entities.Configuration
                         UserName = "Ân Phạm",
                         CategoryId = 1,
                         IsApproval = true,
-                        IsDeny = false,
-                        IsLike = false
-
+                        IsDeny = false
                     },
 
                     new Image()
@@ -128,8 +122,7 @@ namespace Entities.Configuration
                         UserName = "Ân Phạm",
                         CategoryId = 5,
                         IsApproval = true,
-                        IsDeny = false,
-                        IsLike = false
+                        IsDeny = false
 
 
                     },
@@ -145,14 +138,12 @@ namespace Entities.Configuration
                         DateCreate = new DateTime(2021, 06, 28),
                         LikeCount = 23,
                         CommentCount = 0,
-                        ViewsCount = 50,
+                        ViewsCount = 732,
                         UserId = null,
                         UserName = "Ân Phạm",
                         CategoryId = 3,
                         IsApproval = true,
-                        IsDeny = false,
-                        IsLike = false
-
+                        IsDeny = false
                     },
 
                     new Image()
@@ -170,8 +161,7 @@ namespace Entities.Configuration
                         UserName = "Ân Phạm",
                         CategoryId = 1,
                         IsApproval = true,
-                        IsDeny = false,
-                        IsLike = false
+                        IsDeny = false
                     },
 
                     new Image()
@@ -184,13 +174,12 @@ namespace Entities.Configuration
                         DateCreate = new DateTime(2021, 06, 28),
                         LikeCount = 299,
                         CommentCount = 0,
-                        ViewsCount = 9999,
+                        ViewsCount = 78,
                         UserId = null,
                         UserName = "Ân Phạm",
                         CategoryId = 4,
                         IsApproval = true,
-                        IsDeny = false,
-                        IsLike = false
+                        IsDeny = false
 
                     },
 
@@ -209,9 +198,7 @@ namespace Entities.Configuration
                         UserName = "Ân Phạm",
                         CategoryId = 1,
                         IsApproval = true,
-                        IsDeny = false,
-                        IsLike = false
-
+                        IsDeny = false
                     },
 
                     new Image()
@@ -229,9 +216,7 @@ namespace Entities.Configuration
                         UserName = "Ân Phạm",
                         CategoryId = 1,
                         IsApproval = true,
-                        IsDeny = false,
-                        IsLike = false
-
+                        IsDeny = false
                     },
 
                      new Image()
@@ -249,9 +234,7 @@ namespace Entities.Configuration
                          UserName = "Ân Phạm",
                          CategoryId = 6,
                          IsApproval = true,
-                         IsDeny = false,
-                         IsLike = false
-
+                         IsDeny = false
                      }
 
 

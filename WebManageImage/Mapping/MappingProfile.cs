@@ -15,6 +15,10 @@ namespace WebManageImage.Mapping
             CreateMap<ImageForCreateDto, Image>();
             CreateMap<ImageForUpdateDto, Image>();
             CreateMap<UserForRegistrationDto, User>();
+            CreateMap<Like, LikeDto>();
+            CreateMap<Comment, CommentDto>();
+            CreateMap<CommentForCreateDto, Comment>();
+
 
         }
     }

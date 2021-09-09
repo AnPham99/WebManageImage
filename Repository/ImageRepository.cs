@@ -1,4 +1,5 @@
-﻿using Contracts;
+﻿using AutoMapper;
+using Contracts;
 using Entities;
 using Entities.DTO;
 using Entities.Models;
@@ -16,15 +17,57 @@ namespace Repository
     public class ImageRepository : RepositoryBase<Image>, IImageRepository
     {
         private readonly RepositoryContext _repositoryContext;
-        public ImageRepository(RepositoryContext repositoryContext) : base(repositoryContext)
+        private readonly IMapper _mapper;
+
+        public ImageRepository(RepositoryContext repositoryContext, IMapper mapper) : base(repositoryContext)
         {
             _repositoryContext = repositoryContext;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<Image>> GetAllImagesAsync(bool trackChanges) =>
             await FindAll(trackChanges)
             .OrderBy(c => c.Name)
             .ToListAsync();
+
+        /*top like*/
+        public async Task<Image> GetImageTopLike()
+        {
+            var max = (from i in _repositoryContext.Images
+                      where i.IsApproval == true && i.ImageStatus == true
+                      select i).Max(i => i.LikeCount);
+
+            var rs = from i in _repositoryContext.Images
+                      where i.IsApproval == true && i.ImageStatus == true && i.LikeCount == max
+                      select i;
+            return await rs.SingleOrDefaultAsync();
+        }
+
+        /*cmt*/
+        public async Task<Image> GetImageTopCmt()
+        {
+            var max = (from i in _repositoryContext.Images
+                       where i.IsApproval == true && i.ImageStatus == true
+                       select i).Max(i => i.CommentCount);
+
+            var rs = from i in _repositoryContext.Images
+                     where i.IsApproval == true && i.ImageStatus == true && i.CommentCount == max
+                     select i;
+            return await rs.FirstOrDefaultAsync();
+        }
+
+        /*view*/
+        public async Task<Image> GetImageTopView()
+        {
+            var max = (from i in _repositoryContext.Images
+                       where i.IsApproval == true && i.ImageStatus == true
+                       select i).Max(i => i.ViewsCount);
+
+            var rs = from i in _repositoryContext.Images
+                     where i.IsApproval == true && i.ImageStatus == true && i.ViewsCount == max
+                     select i;
+            return await rs.SingleOrDefaultAsync();
+        }
 
         public async Task<IEnumerable<Image>> GetImageHasApproval()
         {        
@@ -33,30 +76,17 @@ namespace Repository
                      select i;
             return await rs.OrderBy(c => c.Name).ToListAsync();
         }
-        /*like*/
-       /* public async Task<IEnumerable<Image>> GetImageTopLike()
-        {
-            int max = 0;
-            var rs = from i in _repositoryContext.Images
-                     where i.IsApproval == true && i.ImageStatus == true
-                     select i;
-            foreach(var img in rs)
-            {
-                if (img.LikeCount > max)
-                    return img;
-            }
-            *//*return await rs.OrderBy(c => c.Name).ToListAsync();*//*
-        }*/
 
         public async Task<IEnumerable<Image>> GetImageNotApproval()
         {
             var rs = from i in _repositoryContext.Images
                      where i.IsApproval == false && i.ImageStatus == true && i.IsDeny == false
                      select i;
+
             return await rs.OrderBy(c => c.Name).ToListAsync();
         }
 
-
+        /*pagging*/
         public async Task<PagedList<Image>> GetAllImagesForCategoryAsync(int categoryId, ImageParameters imageParameters, bool trackChanges)
         {
             var images = await FindByCondition(i => i.CategoryId.Equals(categoryId), trackChanges)
@@ -116,42 +146,38 @@ namespace Repository
             await SaveChangeAsync();
         }
 
-        public async Task LikeImageAsync(/*string userId,*/ Image image)
+        public async Task IncreaseView(Image image)
         {
-            /*var rs = from i in _repositoryContext.Images
-                     join l in _repositoryContext.Likes on i.Id equals l.ImageId
-                     join u in _repositoryContext.Users on l.UserId equals u.Id
-                    
-                     select new
-                    
-
-            foreach (var kq in rs)
-            {
-                if (kq.UserId == userId)
-                {
-                    image.LikeCount += 1;
-                    kq.IsLike = true;
-                }
-                 else
-                {
-                    image.LikeCount -= 1;
-                    image.IsLike = false;
-                }
-
-            }*/
-            /*if (image.IsLike == false)
-            {
-                image.LikeCount += 1;
-                image.IsLike = true;
-            }
-            else
-            {
-                image.LikeCount -= 1;
-                image.IsLike = false;
-            }*/
+            image.ViewsCount += 1;
             Update(image);
             await SaveChangeAsync();
         }
 
+        public async Task LikeImageByUserAsync(string userId, int imageId, Image image)
+        {
+            Update(image);
+            await SaveChangeAsync();
+        }
+
+
+        public async Task addLikeImageAsync(string userId, int imageId, Image image)
+        {
+            image.LikeCount += 1;
+            Update(image);
+            await SaveChangeAsync();
+        }
+
+        public async Task minusLikeImageAsync(string userId, int imageId, Image image)
+        {
+            image.LikeCount -= 1;
+            Update(image);
+            await SaveChangeAsync();
+        }
+
+        public async Task UpdateImage(Image image)
+        {
+            Update(image);
+            await SaveChangeAsync();
+        }
     }
 }

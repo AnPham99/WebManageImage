@@ -43,6 +43,10 @@ namespace WebManageImage
             services.AddScoped<IImageRepository, ImageRepository>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IImageService, ImageService>();
+            services.AddScoped<ILikeRepository, LikeRepository>();
+            services.AddScoped<ICommentRepository, CommentRepository>();
+
+            /*services.AddScoped<ILikeService, LikeService>();*/
             services.AddScoped<IAuthenticationManager, AuthenticationManager>();
 
             services.AddAuthentication();

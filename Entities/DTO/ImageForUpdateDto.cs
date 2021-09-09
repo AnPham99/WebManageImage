@@ -6,7 +6,8 @@ using System.Text;
 namespace Entities.DTO
 {
     public class ImageForUpdateDto : ImageForManipulationDto
-    {
-        public bool IsLike { set; get; }
+     {
+        public int LikeCount { set; get; }
+
     }
 }

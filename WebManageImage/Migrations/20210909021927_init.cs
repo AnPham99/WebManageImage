@@ -28,7 +28,6 @@ namespace WebManageImage.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    IsLike = table.Column<bool>(type: "bit", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -184,7 +183,6 @@ namespace WebManageImage.Migrations
                     ImageStatus = table.Column<bool>(type: "bit", nullable: false),
                     IsApproval = table.Column<bool>(type: "bit", nullable: false),
                     IsDeny = table.Column<bool>(type: "bit", nullable: false),
-                    IsLike = table.Column<bool>(type: "bit", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
@@ -207,6 +205,33 @@ namespace WebManageImage.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Comments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ImageId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Comments_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Comments_Images_ImageId",
+                        column: x => x.ImageId,
+                        principalTable: "Images",
+                        principalColumn: "ImageId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Likes",
                 columns: table => new
                 {
@@ -216,7 +241,7 @@ namespace WebManageImage.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Likes", x => new { x.ImageId, x.UserId });
+                    table.PrimaryKey("PK_Likes", x => new { x.UserId, x.ImageId });
                     table.ForeignKey(
                         name: "FK_Likes_AspNetUsers_UserId",
                         column: x => x.UserId,
@@ -236,8 +261,8 @@ namespace WebManageImage.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "1b4613c7-e6a6-4e5b-917e-7d0fd100d031", "4189b611-486a-4157-8550-23c208a9e731", "User", "USER" },
-                    { "2d7d45dc-0f7a-4ca1-b444-d1f06160028d", "893004c6-4e5b-4202-821f-fc8d321e3cd6", "Admin", "ADMIN" }
+                    { "27f63c5e-b187-45a5-a26d-50484480bb2a", "bd2bb3f2-f581-46f5-a73e-42fbffe1c3e5", "User", "USER" },
+                    { "9042ef13-9435-4017-9cfc-9b548140a4ac", "4fa8d08d-cc5a-42dd-aa9e-7eda91047156", "Admin", "ADMIN" }
                 });
 
             migrationBuilder.InsertData(
@@ -255,21 +280,21 @@ namespace WebManageImage.Migrations
 
             migrationBuilder.InsertData(
                 table: "Images",
-                columns: new[] { "ImageId", "CategoryId", "CommentCount", "DateCreate", "Desciption", "ImageStatus", "IsApproval", "IsDeny", "IsLike", "LikeCount", "Name", "Url", "UserId", "UserName", "ViewsCount" },
+                columns: new[] { "ImageId", "CategoryId", "CommentCount", "DateCreate", "Desciption", "ImageStatus", "IsApproval", "IsDeny", "LikeCount", "Name", "Url", "UserId", "UserName", "ViewsCount" },
                 values: new object[,]
                 {
-                    { 2, 1, 0, new DateTime(2021, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "Rừng nhiệt đới với những tán cây xanh mát đang phát triển vào mùa mưa", true, true, false, false, 24, "Rừng nhiệt đới", "../../assets/Img/rungnhietdoi.jpeg", null, "Ân Phạm", 36 },
-                    { 5, 1, 0, new DateTime(2021, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "Hoàng hôn đang buông xuống vào buổi chiều trông thật đẹp", true, true, false, false, 27, "Hoàng hôn", "../../assets/Img/hoanghon.jpeg", null, "Ân Phạm", 37 },
-                    { 8, 1, 0, new DateTime(2021, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "Dòng sông quê em lúc nào cũng mênh mông con nước, cá tôm rất nhiều", true, true, false, false, 54, "Dòng sông quê em", "../../assets/Img/dongsongqueem.jpeg", null, "Ân Phạm", 77 },
-                    { 10, 1, 0, new DateTime(2021, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "Vịnh Hạ Long một địa danh là di sản văn hóa và kì quan thiên nhiên của Việt Nam", true, true, false, false, 88, "Vịnh Hạ Long", "../../assets/Img/vinhhalong.jpeg", null, "Ân Phạm", 134 },
-                    { 11, 1, 0, new DateTime(2021, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "Vịnh Hạ Long một địa danh là di sản văn hóa và kì quan thiên nhiên của Việt Nam", true, true, false, false, 18, "Sa mạc Sahara", "../../assets/Img/sahara.jpeg", null, "Ân Phạm", 72 },
-                    { 3, 2, 0, new DateTime(2021, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "Cô gái miền tây trong chiếc áo bà ba thước tha", true, true, false, false, 46, "Con gái miền tây", "../../assets/Img/congaimientay.jpeg", null, "Ân Phạm", 55 },
-                    { 1, 3, 0, new DateTime(2021, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "Chó corgi đang chơi đùa ngoài vườn", true, true, false, false, 48, "Chó Corgi", "../../assets/Img/chocogri.jpeg", null, "Ân Phạm", 61 },
-                    { 4, 3, 0, new DateTime(2021, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "Vẻ mặt chú mèo trông ngây thơ khi đòi ăn", true, true, false, false, 109, "Mèo", "../../assets/Img/meo.jpeg", null, "Ân Phạm", 111 },
-                    { 7, 3, 0, new DateTime(2021, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "Chim cánh cụt tập trung theo đàn nghỉ mát trên bờ biển", true, true, false, false, 23, "Chim cánh cụt", "../../assets/Img/chimcanhcut.jpeg", null, "Ân Phạm", 50 },
-                    { 9, 4, 0, new DateTime(2021, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "Cô gái nóng bỏng trong bộ bikini", true, true, false, false, 299, "Bikini", "../../assets/Img/bikini.jpeg", null, "Ân Phạm", 9999 },
-                    { 6, 5, 0, new DateTime(2021, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ảnh thẻ thời học sinh", true, true, false, false, 0, "Ảnh thẻ", "../../assets/Img/anhthe.jpeg", null, "Ân Phạm", 0 },
-                    { 12, 6, 0, new DateTime(2021, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "Kim tự tháp một địa danh là di sản văn hóa và kì quan thiên nhiên của Việt Nam", true, true, false, false, 30, "Kim tự tháp", "../../assets/Img/kimtuthap.jpeg", null, "Ân Phạm", 45 }
+                    { 2, 1, 0, new DateTime(2021, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "Rừng nhiệt đới với những tán cây xanh mát đang phát triển vào mùa mưa", true, true, false, 24, "Rừng nhiệt đới", "../../assets/Img/rungnhietdoi.jpeg", null, "Ân Phạm", 36 },
+                    { 5, 1, 0, new DateTime(2021, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "Hoàng hôn đang buông xuống vào buổi chiều trông thật đẹp", true, true, false, 27, "Hoàng hôn", "../../assets/Img/hoanghon.jpeg", null, "Ân Phạm", 37 },
+                    { 8, 1, 0, new DateTime(2021, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "Dòng sông quê em lúc nào cũng mênh mông con nước, cá tôm rất nhiều", true, true, false, 54, "Dòng sông quê em", "../../assets/Img/dongsongqueem.jpeg", null, "Ân Phạm", 77 },
+                    { 10, 1, 0, new DateTime(2021, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "Vịnh Hạ Long một địa danh là di sản văn hóa và kì quan thiên nhiên của Việt Nam", true, true, false, 88, "Vịnh Hạ Long", "../../assets/Img/vinhhalong.jpeg", null, "Ân Phạm", 134 },
+                    { 11, 1, 0, new DateTime(2021, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "Vịnh Hạ Long một địa danh là di sản văn hóa và kì quan thiên nhiên của Việt Nam", true, true, false, 18, "Sa mạc Sahara", "../../assets/Img/sahara.jpeg", null, "Ân Phạm", 72 },
+                    { 3, 2, 0, new DateTime(2021, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "Cô gái miền tây trong chiếc áo bà ba thước tha", true, true, false, 46, "Con gái miền tây", "../../assets/Img/congaimientay.jpeg", null, "Ân Phạm", 55 },
+                    { 1, 3, 0, new DateTime(2021, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "Chó corgi đang chơi đùa ngoài vườn", true, true, false, 48, "Chó Corgi", "../../assets/Img/chocogri.jpeg", null, "Ân Phạm", 61 },
+                    { 4, 3, 5, new DateTime(2021, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "Vẻ mặt chú mèo trông ngây thơ khi đòi ăn", true, true, false, 109, "Mèo", "../../assets/Img/meo.jpeg", null, "Ân Phạm", 111 },
+                    { 7, 3, 0, new DateTime(2021, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "Chim cánh cụt tập trung theo đàn nghỉ mát trên bờ biển", true, true, false, 23, "Chim cánh cụt", "../../assets/Img/chimcanhcut.jpeg", null, "Ân Phạm", 732 },
+                    { 9, 4, 0, new DateTime(2021, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "Cô gái nóng bỏng trong bộ bikini", true, true, false, 299, "Bikini", "../../assets/Img/bikini.jpeg", null, "Ân Phạm", 78 },
+                    { 6, 5, 0, new DateTime(2021, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "Ảnh thẻ thời học sinh", true, true, false, 0, "Ảnh thẻ", "../../assets/Img/anhthe.jpeg", null, "Ân Phạm", 0 },
+                    { 12, 6, 0, new DateTime(2021, 6, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "Kim tự tháp một địa danh là di sản văn hóa và kì quan thiên nhiên của Việt Nam", true, true, false, 30, "Kim tự tháp", "../../assets/Img/kimtuthap.jpeg", null, "Ân Phạm", 45 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -312,6 +337,16 @@ namespace WebManageImage.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Comments_ImageId",
+                table: "Comments",
+                column: "ImageId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_UserId",
+                table: "Comments",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Images_CategoryId",
                 table: "Images",
                 column: "CategoryId");
@@ -322,10 +357,9 @@ namespace WebManageImage.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Likes_UserId",
+                name: "IX_Likes_ImageId",
                 table: "Likes",
-                column: "UserId",
-                unique: true);
+                column: "ImageId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -344,6 +378,9 @@ namespace WebManageImage.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Comments");
 
             migrationBuilder.DropTable(
                 name: "Likes");
