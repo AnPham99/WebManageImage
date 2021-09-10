@@ -25,10 +25,38 @@ namespace Repository
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<Image>> GetAllImagesAsync(bool trackChanges) =>
-            await FindAll(trackChanges)
-            .OrderBy(c => c.Name)
+        public async Task<PagedList<Image>> GetAllImagesAsync(ImageParameters imageParameters, bool trackChanges)
+        {
+            var images = await FindAll(trackChanges)
+           .OrderBy(c => c.Name)
+           .ToListAsync();
+
+            return PagedList<Image>
+                .ToPagedList(images, imageParameters.PageNumber, imageParameters.PageSize);
+        }
+ 
+        public async Task<PagedList<Image>> GetImageHasApproval(ImageParameters imageParameters, bool trackChanges)
+        {
+            var images = await FindByCondition(i => i.IsApproval.Equals(true) && i.ImageStatus.Equals(true), trackChanges)
+            .Search(imageParameters.SearchTerm)
+            .OrderBy(i => i.Name)
             .ToListAsync();
+
+            return PagedList<Image>
+                .ToPagedList(images, imageParameters.PageNumber, imageParameters.PageSize);
+        }
+
+        /*pagging*/
+        public async Task<PagedList<Image>> GetAllImagesForCategoryAsync(int categoryId, ImageParameters imageParameters, bool trackChanges)
+        {
+            var images = await FindByCondition(i => i.CategoryId.Equals(categoryId), trackChanges)
+            .Search(imageParameters.SearchTerm)
+            .OrderBy(i => i.Name)
+            .ToListAsync();
+
+            return PagedList<Image>
+                .ToPagedList(images, imageParameters.PageNumber, imageParameters.PageSize);
+        }
 
         /*top like*/
         public async Task<Image> GetImageTopLike()
@@ -69,14 +97,6 @@ namespace Repository
             return await rs.SingleOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Image>> GetImageHasApproval()
-        {        
-            var rs = from i in _repositoryContext.Images
-                     where i.IsApproval == true && i.ImageStatus == true
-                     select i;
-            return await rs.OrderBy(c => c.Name).ToListAsync();
-        }
-
         public async Task<IEnumerable<Image>> GetImageNotApproval()
         {
             var rs = from i in _repositoryContext.Images
@@ -84,19 +104,6 @@ namespace Repository
                      select i;
 
             return await rs.OrderBy(c => c.Name).ToListAsync();
-        }
-
-        /*pagging*/
-        public async Task<PagedList<Image>> GetAllImagesForCategoryAsync(int categoryId, ImageParameters imageParameters, bool trackChanges)
-        {
-            var images = await FindByCondition(i => i.CategoryId.Equals(categoryId), trackChanges)
-            .Search(imageParameters.SearchTerm)
-            .OrderBy(i => i.Name)
-            .ToListAsync();
-
-            return PagedList<Image>
-                .ToPagedList(images, imageParameters.PageNumber,
-                imageParameters.PageSize);
         }
 
         public async Task<Image> GetImageByIdAsync(int imageId, bool trackChanges) =>

@@ -83,9 +83,14 @@ namespace Services
         }
 
 
-        public async Task<IEnumerable<Image>> GetAllImagesAsync(bool trackChanges)
+        public async Task<PagedList<Image>> GetAllImagesAsync(ImageParameters imageParameters, bool trackChanges)
         {
-            return await _imageRepository.GetAllImagesAsync(trackChanges);
+            return await _imageRepository.GetAllImagesAsync(imageParameters, trackChanges);
+        }
+
+        public async Task<PagedList<Image>> GetImageHasApproval(ImageParameters imageParameters, bool trackChanges)
+        {
+            return await _imageRepository.GetImageHasApproval(imageParameters, trackChanges);
         }
 
         public async Task<PagedList<Image>> GetAllImagesForCategoryAsync(int categoryId, ImageParameters imageParameters, bool trackChanges)
@@ -98,10 +103,6 @@ namespace Services
             return await _imageRepository.GetImageByIdAsync(imageId, trackChanges);
         }
 
-        public async Task<IEnumerable<Image>> GetImageHasApproval()
-        {
-            return await _imageRepository.GetImageHasApproval();
-        }
         public async Task<IEnumerable<Image>> GetImageNotApproval()
         {
             return await _imageRepository.GetImageNotApproval();

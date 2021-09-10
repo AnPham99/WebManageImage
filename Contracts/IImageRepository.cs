@@ -9,7 +9,8 @@ namespace Contracts
 {
     public interface IImageRepository
     {
-        Task<IEnumerable<Image>> GetAllImagesAsync(bool trackChanges);
+        Task<PagedList<Image>> GetAllImagesAsync(ImageParameters imageParameters, bool trackChanges);
+        Task<PagedList<Image>> GetImageHasApproval(ImageParameters imageParameters, bool trackChanges);
         Task<PagedList<Image>> GetAllImagesForCategoryAsync(int categoryId, ImageParameters imageParameters, bool trackChanges);
         Task<Image> GetImageByIdAsync(int imageId, bool trackChanges);
         Task<IEnumerable<Image>> GetImageByUserAsync (string userId, bool trackChanges);
@@ -24,7 +25,6 @@ namespace Contracts
         Task<Image> GetImageTopCmt();
         Task<Image> GetImageTopView();
         Task UpdateImage(Image image);
-        Task<IEnumerable<Image>> GetImageHasApproval();
         Task<IEnumerable<Image>> GetImageNotApproval();
 
         Task LikeImageByUserAsync(string userId, int imageId, Image image);

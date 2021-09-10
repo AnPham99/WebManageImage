@@ -36,9 +36,19 @@ namespace WebManageImage.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllImages()
+        public async Task<IActionResult> GetAllImages([FromQuery] ImageParameters imageParameters)
         {
-            var image = await _imageService.GetAllImagesAsync(trackChanges: false);
+            var image = await _imageService.GetAllImagesAsync(imageParameters, trackChanges: false);
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(image.MetaData));
+            var imageDto = _mapper.Map<IEnumerable<GetImageDto>>(image);
+            return Ok(imageDto);
+        }
+
+        [HttpGet("hasapproval")]
+        public async Task<IActionResult> GetImageHasApproval([FromQuery] ImageParameters imageParameters)
+        {
+            var image = await _imageService.GetImageHasApproval(imageParameters, trackChanges: false);
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(image.MetaData));
             var imageDto = _mapper.Map<IEnumerable<GetImageDto>>(image);
             return Ok(imageDto);
         }
@@ -170,15 +180,7 @@ namespace WebManageImage.Controllers
             var image = _mapper.Map(imageForUpdateDto, imageDb);
             await _imageService.IncreaseView(image);
             return Ok("Đã sửa thành công");
-        }
-
-        [HttpGet("hasapproval")]
-        public async Task<IActionResult> GetImageHasApproval()
-        {
-            var image = await _imageService.GetImageHasApproval();
-            var imageDto = _mapper.Map<IEnumerable<GetImageDto>>(image);
-            return Ok(imageDto);
-        }
+        } 
 
         [HttpGet("notapproval")]      
         public async Task<IActionResult> GetImageNotApproval()

@@ -9,7 +9,8 @@ namespace Services.Interfaces
 {
     public interface IImageService
     {
-        Task<IEnumerable<Image>> GetAllImagesAsync(bool trackChanges);
+        Task<PagedList<Image>> GetAllImagesAsync(ImageParameters imageParameters, bool trackChanges);
+        Task<PagedList<Image>> GetImageHasApproval(ImageParameters imageParameters, bool trackChanges);
         Task<PagedList<Image>> GetAllImagesForCategoryAsync(int categoryId, ImageParameters imageParameters, bool trackChanges);
         Task<Image> GetImageByIdAsync(int imageId, bool trackChanges);
         Task<IEnumerable<Image>> GetImageByUserAsync(string userId, bool trackChanges);
@@ -19,7 +20,6 @@ namespace Services.Interfaces
         Task UpdateImageByUserAsync(string userId, Image image);      
         Task ApprovalImageByAdminAsync(Image image);
         Task DenyImageByAdminAsync(Image image);
-        Task<IEnumerable<Image>> GetImageHasApproval();
         Task<IEnumerable<Image>> GetImageNotApproval();
         Task<Image> GetImageTopLike();
         Task<Image> GetImageTopCmt();
