@@ -15,6 +15,7 @@ namespace Contracts
         Task<Image> GetImageByIdAsync(int imageId, bool trackChanges);
         Task<IEnumerable<Image>> GetImageByUserAsync (string userId, bool trackChanges);
         Task<Image> GetImageByIdForUserAsync(string userId, int imageId, bool trackChanges);
+        Task<Image> GetNewImageInCate(int cateId);
         Task CreateImageAsync(string userId, Image image);
         Task DeleteImageAsync(string userId, Image image);      
         Task UpdateImageByUserAsync(string userId, Image image);

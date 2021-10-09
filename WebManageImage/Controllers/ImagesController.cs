@@ -91,6 +91,14 @@ namespace WebManageImage.Controllers
             return Ok(imageDto);
         }
 
+        [HttpGet("new/{cateId}")]
+        public async Task<IActionResult> GetNewImageInCate(int cateId)
+        {
+            var imageDb = await _imageService.GetNewImageInCate(cateId);
+            var imageDto = _mapper.Map<GetImageDto>(imageDb);
+            return Ok(imageDto);
+        }
+
         [HttpPost("{userId}")]
         public async Task<IActionResult> CreateImageForCategory (string userId, [FromBody] ImageForCreateDto imageForCreate)
         {

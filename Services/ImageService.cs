@@ -93,6 +93,11 @@ namespace Services
             return await _imageRepository.GetImageHasApproval(imageParameters, trackChanges);
         }
 
+        public async Task<Image> GetNewImageInCate(int cateId)
+        {
+            return await _imageRepository.GetNewImageInCate(cateId);
+        }
+
         public async Task<PagedList<Image>> GetAllImagesForCategoryAsync(int categoryId, ImageParameters imageParameters, bool trackChanges)
         {
             return await _imageRepository.GetAllImagesForCategoryAsync(categoryId, imageParameters, trackChanges);

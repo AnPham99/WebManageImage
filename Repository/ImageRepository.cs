@@ -49,7 +49,7 @@ namespace Repository
         /*pagging*/
         public async Task<PagedList<Image>> GetAllImagesForCategoryAsync(int categoryId, ImageParameters imageParameters, bool trackChanges)
         {
-            var images = await FindByCondition(i => i.CategoryId.Equals(categoryId), trackChanges)
+            var images = await FindByCondition(i => i.CategoryId.Equals(categoryId) && i.IsApproval.Equals(true) && i.ImageStatus.Equals(true), trackChanges)
             .Search(imageParameters.SearchTerm)
             .OrderBy(i => i.Name)
             .ToListAsync();
@@ -185,6 +185,18 @@ namespace Repository
         {
             Update(image);
             await SaveChangeAsync();
+        }
+
+        public async Task<Image> GetNewImageInCate(int cateId)
+        {
+            var newImage = (from i in _repositoryContext.Images
+                            select i).Max(i => i.DateCreate);
+
+            var img = from i in _repositoryContext.Images
+                      where i.CategoryId == cateId
+                      orderby i.DateCreate descending
+                      select i;
+            return await img.FirstOrDefaultAsync();
         }
     }
 }

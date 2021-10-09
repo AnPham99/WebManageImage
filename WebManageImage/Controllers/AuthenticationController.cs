@@ -63,14 +63,14 @@ namespace WebManageImage.Controllers
         }
 
 
-        /*[HttpGet("profile")]
-        public async Task<IActionResult> Authentic()
+        [HttpGet("profile/{userId}")]
+        public async Task<IActionResult> Authentic(string userId)
         {
-            var userName = this.HttpContext.User.FindFirst(ClaimTypes.Name).Value;
+            var user = await _userManager.FindByIdAsync(userId);
+            var userDto = _mapper.Map<UserDto>(user);
+            return Ok(userDto);
 
-            return Ok(userName);
-
-        }*/
+        }
     }
 
 }

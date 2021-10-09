@@ -18,6 +18,8 @@ namespace WebManageImage.Mapping
             CreateMap<Like, LikeDto>();
             CreateMap<Comment, CommentDto>();
             CreateMap<CommentForCreateDto, Comment>();
+            CreateMap<User, UserDto>();
+
 
 
         }

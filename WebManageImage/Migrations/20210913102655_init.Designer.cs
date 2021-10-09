@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace WebManageImage.Migrations
 {
     [DbContext(typeof(RepositoryContext))]
-    [Migration("20210909021927_init")]
+    [Migration("20210913102655_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -469,15 +469,15 @@ namespace WebManageImage.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "27f63c5e-b187-45a5-a26d-50484480bb2a",
-                            ConcurrencyStamp = "bd2bb3f2-f581-46f5-a73e-42fbffe1c3e5",
+                            Id = "3d247859-11f4-41cd-ba94-4e7ef522fdbe",
+                            ConcurrencyStamp = "738cef5d-5204-4312-b3a6-6e99a4b17d7b",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
-                            Id = "9042ef13-9435-4017-9cfc-9b548140a4ac",
-                            ConcurrencyStamp = "4fa8d08d-cc5a-42dd-aa9e-7eda91047156",
+                            Id = "c4c95195-5446-4642-862b-ae4b54e18926",
+                            ConcurrencyStamp = "abb29884-46ee-4a8c-a67a-d969b805cc95",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         });
